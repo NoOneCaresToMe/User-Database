@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Corner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        .container {
+            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-top: 50px;
+        }
+        .sidebar {
+            width: 200px;
+        }
+        .content {
+            flex: 1;
+            margin-left: 20px;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .menu {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menu li {
+            margin-bottom: 10px;
+        }
+        .menu a {
+            text-decoration: none;
+            background-color: #f2f2f2;
+            color: #333;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .menu a:hover {
+            background-color: #e0e0e0;
+        }
+        .submenu {
+            margin-left: 20px;
+        }
+        .details {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f2f2f2;
+        }
+        .details p {
+            margin-bottom: 10px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Menu</h3>
+            <ul class="menu">
+                <li>
+                    <a href="#">Customers</a>
+                    <ul class="submenu">
+                        <li><a href="/register">Registration</a></li>
+                        <li><a href="/edit">Edit</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Customer Corner</h1>
+            {% if latest_customer %}
+            <div class="details">
+                <h3>Customer Details</h3>
+                <p><strong>Name:</strong> {{ latest_customer[1] }}</p>
+                <p><strong>Phone Number:</strong> {{ latest_customer[2] }}</p>
+                <p><strong>Address:</strong> {{ latest_customer[3] }}</p>
+                <p><strong>Remark:</strong> {{ latest_customer[4] }}</p>
+            </div>
+            {% endif %}
+
+            {% if previous_customer %}
+            <div class="details">
+                <h3>Previous Customer Details</h3>
+                <p><strong>Name:</strong> {{ previous_customer[1] }}</p>
+                <p><strong>Phone Number:</strong> {{ previous_customer[2] }}</p>
+                <p><strong>Address:</strong> {{ previous_customer[3] }}</p>
+                <p><strong>Remark:</strong> {{ previous_customer[4] }}</p>
+            </div>
+            {% endif %}
+    </div>    
+</body>
+</html>

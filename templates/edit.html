@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Customer Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #666;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Customer Details</h1>
+        <form action="/edit" method="POST">
+            <label for="customer_id">Customer ID:</label>
+            <input type="text" id="customer_id" name="customer_id" required>
+            <input type="submit" value="Edit">
+        </form>
+
+        {% if customer %}
+            <form action="/update" method="POST">
+                <input type="hidden" id="customer_id" name="customer_id" value="{{ customer[0] }}">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ customer[1] }}" required>
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone" value="{{ customer[2] }}" required>
+                <label for="address">Address:</label>
+                <textarea id="address" name="address" required>{{ customer[3] }}</textarea>
+                <label for="remark">Remark:</label>
+                <input type="text" id="remark" name="remark" value="{{ customer[4] }}" required>
+                <input type="submit" value="Update">
+            </form>
+        {% elif error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
