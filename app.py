@@ -119,6 +119,23 @@ def update():
     db.commit()
 
     return redirect('/')
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if 'username' not in session:
+        return redirect('/login')
+
+    if request.method == 'POST':
+        customer_id = request.form['customer_id']
+
+        # Delete the customer from the database
+        db = get_db()
+        c = db.cursor()
+        c.execute("DELETE FROM customers WHERE id=?", (customer_id,))
+        db.commit()
+
+        return redirect('/')
+
+    return render_template('delete.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
