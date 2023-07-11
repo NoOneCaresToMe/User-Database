@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, g, session
+from flask import Flask, render_template, request, redirect, g, session, flash
 import sqlite3
 
 app = Flask(__name__)
@@ -56,7 +56,7 @@ def index():
         return render_template('index.html', latest_customer=latest_customer, previous_customer=previous_customer)
     else:
         return redirect('/login')
-    
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if 'username' not in session:
@@ -75,6 +75,7 @@ def register():
                   (name, phone, address, remark))
         db.commit()
 
+        flash('Customer registered successfully!', 'success')
         return redirect('/')
 
     return render_template('register.html')
@@ -84,10 +85,10 @@ def edit():
     if 'username' not in session:
         return redirect('/login')
 
-    if request.method == 'POST':
-        customer_id = request.form['customer_id']
+    customer_id = request.form.get('customer_id')  # Get the customer ID from the form submission
 
-        # Fetch customer details from the database
+    if request.method == 'POST' and customer_id:
+        # Fetch customer details from the database using the customer ID
         db = get_db()
         c = db.cursor()
         c.execute("SELECT * FROM customers WHERE id=?", (customer_id,))
@@ -118,7 +119,9 @@ def update():
               (name, phone, address, remark, customer_id))
     db.commit()
 
+    flash('Customer updated successfully!', 'success')
     return redirect('/')
+
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     if 'username' not in session:
@@ -133,6 +136,7 @@ def delete():
         c.execute("DELETE FROM customers WHERE id=?", (customer_id,))
         db.commit()
 
+        flash('Customer deleted successfully!', 'success')
         return redirect('/')
 
     return render_template('delete.html')
@@ -148,7 +152,8 @@ def login():
             session['username'] = username
             return redirect('/')
         else:
-            return render_template('login.html', error="Invalid credentials")
+            flash('Invalid credentials', 'error')
+            return render_template('login.html')
 
     return render_template('login.html')
 

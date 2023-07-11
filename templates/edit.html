@@ -58,17 +58,58 @@
             margin-top: 10px;
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener for the "Edit" button
+            document.querySelector('form[action="/edit"]').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Display the confirmation dialog using SweetAlert2
+                Swal.fire({
+                    icon: 'question',
+                    title: 'Confirmation',
+                    text: 'Are you sure you want to edit the customer details?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Edit',
+                    cancelButtonText: 'Cancel'
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        // Proceed with editing the customer details
+                        event.target.submit();
+                    }
+                });
+            });
+
+            // Add event listener for the "Update" button
+            document.querySelector('form[action="/update"]').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                // Display the success dialog using SweetAlert2
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Customer updated successfully!'
+                }).then(function() {
+                    // Redirect to the index page after the dialog is closed
+                    window.location.href = '/';
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Edit Customer Details</h1>
+
         <form action="/edit" method="POST">
             <label for="customer_id">Customer ID:</label>
             <input type="text" id="customer_id" name="customer_id" required>
             <input type="submit" value="Edit">
         </form>
 
-        {% if customer %}
+        {% if customer is defined %}
             <form action="/update" method="POST">
                 <input type="hidden" id="customer_id" name="customer_id" value="{{ customer[0] }}">
                 <label for="name">Name:</label>

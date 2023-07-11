@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
     <title>Register Customer</title>
     <style>
         body {
@@ -53,21 +55,48 @@
             background-color: #45a049;
         }
     </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            // Display the success dialog using SweetAlert2
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Customer registered successfully!'
+            }).then(function() {
+                // Redirect to the index page after the dialog is closed
+                window.location.href = '/';
+            });
+        });
+    });
+</script>
 </head>
 <body>
-    <div class="container">
-        <h1>Register Customer</h1>
-        <form action="/register" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <label for="phone">Phone Number:</label>
-            <input type="text" id="phone" name="phone" required>
-            <label for="address">Address:</label>
-            <textarea id="address" name="address" required></textarea>
-            <label for="remark">Remark:</label>
-            <input type="text" id="remark" name="remark" required>
-            <input type="submit" value="Register">
-        </form>
-    </div>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flash-messages">
+            {% for message in messages %}
+                <li class="{{ message[0] }}">{{ message[1] }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<div class="container">
+    <h1>Register Customer</h1>
+    <form action="/register" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" required>
+        <label for="address">Address:</label>
+        <textarea id="address" name="address" required></textarea>
+        <label for="remark">Remark:</label>
+        <input type="text" id="remark" name="remark" required>
+        <input type="submit" value="Register" onclick="showSuccessDialog()">
+    </form>
+</div>
 </body>
-</html>
+</html> 
