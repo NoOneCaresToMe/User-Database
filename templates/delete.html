@@ -78,7 +78,9 @@
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
                     confirmButtonText: 'Delete',
-                    cancelButtonText: 'Cancel'
+                    cancelButtonText: 'Cancel',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
@@ -86,24 +88,52 @@
                             text: 'Please wait while the customer data is being deleted.',
                             icon: 'info',
                             showConfirmButton: false,
-                            allowOutsideClick: false
+                            allowOutsideClick: false,
+                            allowEscapeKey: false
                         });
-                        form.submit();
+                        
+                        // Perform AJAX request to delete the customer
+                        const xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/delete');
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onload = function() {
+                            if (xhr.status === 200) {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Deleted!',
+                                        text: 'The customer data has been deleted successfully.',
+                                        icon: 'success',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false
+                                    }).then(() => {
+                                        // Redirect to index page
+                                        window.location.href = '/?deletionSuccessful=true';
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: response.message,
+                                        icon: 'error',
+                                        allowOutsideClick: false,
+                                        allowEscapeKey: false
+                                    });
+                                }
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'An error occurred while deleting the customer.',
+                                    icon: 'error',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                });
+                            }
+                        };
+                        xhr.send(new URLSearchParams(new FormData(form)).toString());
                     }
                 });
             });
         });
-    </script>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const deletionSuccessful = urlParams.get('deletionSuccessful');
-        if (deletionSuccessful) {
-            Swal.fire({
-                title: 'Deleted!',
-                text: 'The customer data has been deleted successfully.',
-                icon: 'success'
-            });
-        }
     </script>
 </head>
 <body>
